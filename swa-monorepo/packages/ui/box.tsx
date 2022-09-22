@@ -1,5 +1,5 @@
 type BoxProps = React.HTMLProps<HTMLDivElement> & {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 /*
     Style inspired by Chakra-UI, where css is passed as props,
