@@ -1,5 +1,8 @@
-type BoxProps = React.HTMLProps<HTMLDivElement> & {
-  children?: React.ReactNode;
+import { ForwardedRef, forwardRef } from "react";
+
+type BoxProps = React.CSSProperties & {
+  children?: React.ReactNode | React.ReactNode[] | any;
+  onClick?: (e: React.MouseEvent) => void;
 };
 /*
     Style inspired by Chakra-UI, where css is passed as props,
@@ -8,6 +11,16 @@ type BoxProps = React.HTMLProps<HTMLDivElement> & {
     Also helps scope css without worrying about overlap.
     Also provides type safety.
 */
-export const Box = ({ children, ...props }: BoxProps) => {
-  return <div style={{ ...props }}>{children}</div>;
-};
+
+export const Box = forwardRef(
+  (
+    { children, onClick, ...props }: BoxProps,
+    ref: ForwardedRef<HTMLDivElement>
+  ) => {
+    return (
+      <div style={{ ...props }} onClick={onClick} ref={ref}>
+        {children}
+      </div>
+    );
+  }
+);
