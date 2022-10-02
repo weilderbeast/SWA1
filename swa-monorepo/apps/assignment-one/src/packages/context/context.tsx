@@ -1,3 +1,4 @@
+import moment from "moment";
 import {
   createContext,
   useCallback,
@@ -5,23 +6,26 @@ import {
   useEffect,
   useState,
 } from "react";
-import { FormattedData } from "../../utils/types";
+import {
+  FormattedForecastData,
+  FormattedHistoricalData,
+} from "../../utils/types";
 import { useFetch } from "../fetch/fetch";
+import { useXHR } from "../xhr/xhr";
 
 type Props = {
   children?: React.ReactNode;
 };
 
 type ContextType = {
-  getDataForCity: (city: string) => FormattedData[];
-  latestMeasurementForCity: (city: string) => FormattedData | undefined;
-  setCity: (city: string) => void;
-  enabled: boolean;
-  setEnabled: (enabled: boolean) => void;
-};
-
-type SelectionMap<T> = {
-  [city: string]: T[];
+  changeCity: (city: "Aarhus" | "Horsens" | "Copenhagen") => void;
+  changeRequestType: (type: "xhr" | "fetch") => void;
+  latestMeasurements: () => FormattedHistoricalData;
+  minTempForLastDay: () => number;
+  maxTempForLastDay: () => number;
+  totalPrecipForLastDay: () => number;
+  avgWindSpeedForLastDay: () => number;
+  forecastData: FormattedForecastData[];
 };
 
 const AppContext = createContext<ContextType>({} as ContextType);
@@ -30,53 +34,76 @@ export const useAppContext = (): ContextType =>
   useContext(AppContext) as ContextType;
 
 export const Context: React.FC<Props> = ({ children }: Props) => {
-  const { getDataForCity } = useFetch();
-  const [data, setData] = useState<SelectionMap<FormattedData>>({});
-  const [enabled, setEnabled] = useState(true);
   const [city, setCity] = useState("Aarhus");
+  const [requestType, setRequestType] = useState<"fetch" | "xhr">("fetch");
+  const [historicalData, setHistoricalData] = useState<
+    FormattedHistoricalData[]
+  >([]);
+  const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
+  const { forecastData: xhrForecastData, historicalData: xhrHistoricalData } =
+    useXHR(city);
+  const {
+    forecastData: fetchForecastData,
+    historicalData: fetchHistoricalData,
+  } = useFetch(city);
 
   useEffect(() => {
-    const func = async () => {
-      await getDataForCity(city)
-        .then((value) => {
-          setData((prev) => {
-            if (!prev[city]) {
-              return {
-                ...prev,
-                [city]: [...value],
-              };
-            }
-            return {
-              ...prev,
-              [city]: [...prev[city], ...value],
-            };
-          });
-        })
-        .then(() => {
-          console.log(data);
-        });
-    };
+    if (requestType === "fetch") {
+      setForecastData(fetchForecastData);
+      setHistoricalData(fetchHistoricalData);
+    } else {
+      setForecastData(xhrForecastData);
+      setHistoricalData(xhrHistoricalData);
+    }
+  }, [requestType]);
 
-    func();
-  }, []);
+  const latestMeasurements = useCallback(
+    () => historicalData[historicalData.length - 1],
+    [historicalData]
+  );
 
-  const getMeasurementDataForCity = useCallback(
-    (city: string) => data[city] ?? [],
-    [data]
+  const minTempForLastDay = useCallback(() => {
+    const last24 = historicalData
+      .map((item) => item.data.temperature.value)
+      .slice(-24);
+    return Math.min(...last24);
+  }, [historicalData]);
+
+  const maxTempForLastDay = useCallback(() => {
+    const last24 = historicalData
+      .map((item) => item.data.temperature.value)
+      .slice(-24);
+    return Math.max(...last24);
+  }, [historicalData]);
+
+  const totalPrecipForLastDay = useCallback(
+    () =>
+      historicalData
+        .map((item) => item.data.precipitation.value)
+        .slice(-24)
+        .reduce((item, prev) => item + prev),
+    [historicalData]
   );
-  const latestMeasurementForCity = useCallback(
-    (city: string) => (data[city] ?? []).at(-1),
-    [data]
-  );
+
+  const avgWindSpeedForLastDay = useCallback(() => {
+    const last24 = historicalData
+      .map((item) => item.data.wind.value)
+      .slice(-24);
+    return last24.reduce((item, prev) => item + prev) / 24;
+  }, [historicalData]);
 
   return (
     <AppContext.Provider
       value={{
-        getDataForCity: getMeasurementDataForCity,
-        latestMeasurementForCity,
-        setCity,
-        enabled,
-        setEnabled,
+        changeCity: (city: "Aarhus" | "Horsens" | "Copenhagen") =>
+          setCity(city),
+        changeRequestType: (type: "xhr" | "fetch") => setRequestType(type),
+        latestMeasurements,
+        minTempForLastDay,
+        maxTempForLastDay,
+        totalPrecipForLastDay,
+        avgWindSpeedForLastDay,
+        forecastData,
       }}
     >
       {children}

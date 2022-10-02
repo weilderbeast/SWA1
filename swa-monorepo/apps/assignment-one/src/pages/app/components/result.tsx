@@ -11,9 +11,9 @@ type RefreshState = "Manual" | "Auto";
 
 export const Result = () => {
   const [refreshState, setRefreshState] = useState<RefreshState>("Auto");
-  const { latestMeasurementForCity, setEnabled, enabled } = useAppContext();
+  // const { setEnabled, enabled } = useAppContext();
 
-  const data = latestMeasurementForCity("Aarhus")?.data;
+  // const data = latestMeasurementForCity("Aarhus")?.data;
   return (
     <Box
       display="flex"
@@ -54,7 +54,7 @@ export const Result = () => {
               borderRadius="27px"
               onClick={() => {
                 setRefreshState(refreshState === "Auto" ? "Manual" : "Auto");
-                setEnabled(!enabled);
+                // setEnabled(!enabled);
               }}
             >
               <ImSpinner11 /> Refresh
@@ -71,7 +71,7 @@ export const Result = () => {
             </Box>
           </Box>
           <p style={{ fontSize: "75px", fontWeight: "800" }}>
-            {data?.temperature?.value} °{data?.temperature?.unit}
+            {/* {data?.temperature?.value} °{data?.temperature?.unit} */}
           </p>
         </Box>
         <Box
@@ -96,7 +96,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Rain</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {data?.precipitation?.value} {data?.precipitation?.unit}
+                {/* {data?.precipitation?.value} {data?.precipitation?.unit} */}
               </p>
             </Box>
           </Box>
@@ -115,7 +115,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Wind</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {data?.wind?.value} {data?.wind?.unit} {data?.wind?.direction}
+                {/* {data?.wind?.value} {data?.wind?.unit} {data?.wind?.direction} */}
               </p>
             </Box>
           </Box>
@@ -134,7 +134,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Clouds</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {data?.cloud?.value} {data?.cloud?.unit}
+                {/* {data?.cloud?.value} {data?.cloud?.unit} */}
               </p>
             </Box>
           </Box>
