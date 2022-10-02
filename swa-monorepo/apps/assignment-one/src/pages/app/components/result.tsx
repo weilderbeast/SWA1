@@ -1,34 +1,19 @@
 import { Box } from "ui";
-import {
-  CloudCoverage,
-  Precipitation,
-  Temperature,
-  WindSpeed,
-} from "../../../utils/types";
 import { FaCloudSun } from "react-icons/fa";
 import { BsFillCloudRainFill, BsCloudsFill } from "react-icons/bs";
 import { TbWind } from "react-icons/tb";
 import { RiMapPin2Fill } from "react-icons/ri";
 import { ImSpinner11 } from "react-icons/im";
 import { useState } from "react";
-
-type ResultProps = {
-  temperature?: Temperature;
-  precipitation?: Precipitation;
-  wind?: WindSpeed;
-  cloud?: CloudCoverage;
-};
+import { useAppContext } from "../../../packages/context/context";
 
 type RefreshState = "Manual" | "Auto";
 
-export const Result = ({
-  temperature,
-  precipitation,
-  wind,
-  cloud,
-}: ResultProps) => {
+export const Result = () => {
   const [refreshState, setRefreshState] = useState<RefreshState>("Auto");
+  const { latestMeasurementForCity, setEnabled, enabled } = useAppContext();
 
+  const data = latestMeasurementForCity("Aarhus")?.data;
   return (
     <Box
       display="flex"
@@ -69,6 +54,7 @@ export const Result = ({
               borderRadius="27px"
               onClick={() => {
                 setRefreshState(refreshState === "Auto" ? "Manual" : "Auto");
+                setEnabled(!enabled);
               }}
             >
               <ImSpinner11 /> Refresh
@@ -77,6 +63,7 @@ export const Result = ({
               background={
                 refreshState === "Manual" ? "rgba(55,55,55,0.6)" : "limegreen"
               }
+              transition=".2s ease-in-out"
               padding="6px 14px"
               borderRadius="27px"
             >
@@ -84,7 +71,7 @@ export const Result = ({
             </Box>
           </Box>
           <p style={{ fontSize: "75px", fontWeight: "800" }}>
-            {temperature?.value} °{temperature?.unit}
+            {data?.temperature?.value} °{data?.temperature?.unit}
           </p>
         </Box>
         <Box
@@ -109,7 +96,7 @@ export const Result = ({
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Rain</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {precipitation?.value} {precipitation?.unit}
+                {data?.precipitation?.value} {data?.precipitation?.unit}
               </p>
             </Box>
           </Box>
@@ -128,7 +115,7 @@ export const Result = ({
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Wind</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {wind?.value} {wind?.unit} {wind?.direction}
+                {data?.wind?.value} {data?.wind?.unit} {data?.wind?.direction}
               </p>
             </Box>
           </Box>
@@ -147,7 +134,7 @@ export const Result = ({
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Clouds</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {cloud?.value} {cloud?.unit}
+                {data?.cloud?.value} {data?.cloud?.unit}
               </p>
             </Box>
           </Box>

@@ -1,9 +1,9 @@
 import { Box } from "ui";
-import { DataGroup } from "../../../utils/types";
+
 import { TimelineCard } from "./timeline-card";
 
 type TimelineProps = {
-  data: DataGroup[];
+  data: any[];
 };
 
 export const Timeline = ({ data }: TimelineProps) => {
@@ -16,9 +16,9 @@ export const Timeline = ({ data }: TimelineProps) => {
       alignItems="flex-end"
       gap="25px"
     >
-      <TimelineCard data={data[0]} index={1} />
+      {/* <TimelineCard data={data[0]} index={1} />
       <TimelineCard data={data[0]} index={2} />
-      <TimelineCard data={data[0]} index={3} />
+      <TimelineCard data={data[0]} index={3} /> */}
     </Box>
   );
 };

@@ -1,50 +1,8 @@
 import { Box } from "ui";
-import {
-  CloudCoverage,
-  Precipitation,
-  Temperature,
-  WindSpeed,
-} from "../../utils/types";
 import "./app.css";
 import { Result } from "./components/result";
-import { Search } from "./components/search";
-import { Timeline } from "./components/timeline";
 
-export default function App() {
-  const mockTemp: Temperature = {
-    type: "temperature",
-    place: "Aarhus",
-    time: new Date().toISOString(),
-    unit: "C",
-    value: 35,
-  };
-
-  const mockPrecip: Precipitation = {
-    type: "precipitation",
-    place: "Aarhus",
-    time: new Date().toISOString(),
-    precipitation_type: "rain",
-    unit: "mm",
-    value: 10,
-  };
-
-  const mockWind: WindSpeed = {
-    type: "wind speed",
-    direction: "North",
-    place: "Aarhus",
-    time: new Date().toISOString(),
-    unit: "m/s",
-    value: 15,
-  };
-
-  const mockCloud: CloudCoverage = {
-    type: "cloud coverage",
-    place: "Aarhus",
-    time: new Date().toISOString(),
-    unit: "%",
-    value: 100,
-  };
-
+export const App = () => {
   return (
     <Box
       height="100vh"
@@ -53,7 +11,7 @@ export default function App() {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
-      backgroundImage={`url("./${mockTemp.place}.jpg")`}
+      backgroundImage={`url("./Aarhus.jpg")`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
@@ -69,14 +27,8 @@ export default function App() {
         padding="65px"
         gap="15%"
       >
-        {/* <Search /> */}
-        <Result
-          cloud={mockCloud}
-          precipitation={mockPrecip}
-          wind={mockWind}
-          temperature={mockTemp}
-        />
-        <Timeline
+        <Result />
+        {/* <Timeline
           data={[
             {
               temperature: mockTemp,
@@ -85,8 +37,8 @@ export default function App() {
               wind: mockWind,
             },
           ]}
-        />
+        /> */}
       </Box>
     </Box>
   );
-}
+};

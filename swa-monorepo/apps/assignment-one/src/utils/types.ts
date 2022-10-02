@@ -23,9 +23,29 @@ export type CloudCoverage = {
   type: "cloud coverage";
 } & Base;
 
-export type DataGroup = {
-  temperature: Temperature;
-  precipitation: Precipitation;
-  wind: WindSpeed;
-  cloud: CloudCoverage;
+export type Composite = Temperature | Precipitation | WindSpeed | CloudCoverage;
+
+export type FormattedData = {
+  place: string;
+  time: string;
+  data: {
+    temperature: {
+      value: number;
+      unit: string;
+    };
+    precipitation: {
+      value: number;
+      unit: string;
+      type: string;
+    };
+    wind: {
+      value: number;
+      unit: string;
+      direction: string;
+    };
+    cloud: {
+      value: number;
+      unit: string;
+    };
+  };
 };
