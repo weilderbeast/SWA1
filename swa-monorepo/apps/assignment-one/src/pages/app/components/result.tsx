@@ -4,16 +4,33 @@ import { BsFillCloudRainFill, BsCloudsFill } from "react-icons/bs";
 import { TbWind } from "react-icons/tb";
 import { RiMapPin2Fill } from "react-icons/ri";
 import { ImSpinner11 } from "react-icons/im";
-import { useState } from "react";
 import { useAppContext } from "../../../packages/context/context";
-
-type RefreshState = "Manual" | "Auto";
+import { useEffect } from "react";
 
 export const Result = () => {
-  const [refreshState, setRefreshState] = useState<RefreshState>("Auto");
-  // const { setEnabled, enabled } = useAppContext();
+  const {
+    changeCity,
+    changeRequestType,
+    latestMeasurements,
+    city,
+    requestType,
+  } = useAppContext();
+  const data = latestMeasurements()?.data;
 
-  // const data = latestMeasurementForCity("Aarhus")?.data;
+  if (!data) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        width="100%"
+      >
+        Loading...
+      </Box>
+    );
+  }
+
   return (
     <Box
       display="flex"
@@ -43,35 +60,26 @@ export const Result = () => {
             gap="10px"
           >
             <RiMapPin2Fill style={{ height: "30px", width: "30px" }} />
-            <p style={{ fontSize: "35px", fontWeight: "300" }}>Aarhus</p>
+            <p style={{ fontSize: "35px", fontWeight: "300" }}>{city}</p>
             <Box
               display="flex"
               justifyContent="center"
               alignItems="center"
               gap="8px"
-              background="rgba(55,55,55,0.6)"
+              background={requestType === "fetch" ? "lightblue" : "limegreen"}
               padding="6px 14px"
               borderRadius="27px"
+              textTransform="capitalize"
               onClick={() => {
-                setRefreshState(refreshState === "Auto" ? "Manual" : "Auto");
-                // setEnabled(!enabled);
+                changeRequestType(requestType === "fetch" ? "xhr" : "fetch");
               }}
+              cursor="pointer"
             >
-              <ImSpinner11 /> Refresh
-            </Box>
-            <Box
-              background={
-                refreshState === "Manual" ? "rgba(55,55,55,0.6)" : "limegreen"
-              }
-              transition=".2s ease-in-out"
-              padding="6px 14px"
-              borderRadius="27px"
-            >
-              {refreshState}
+              <ImSpinner11 /> {requestType}
             </Box>
           </Box>
           <p style={{ fontSize: "75px", fontWeight: "800" }}>
-            {/* {data?.temperature?.value} °{data?.temperature?.unit} */}
+            {data?.temperature?.value} °{data?.temperature?.unit}
           </p>
         </Box>
         <Box
@@ -96,7 +104,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Rain</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {/* {data?.precipitation?.value} {data?.precipitation?.unit} */}
+                {data?.precipitation?.value} {data?.precipitation?.unit}
               </p>
             </Box>
           </Box>
@@ -115,7 +123,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Wind</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {/* {data?.wind?.value} {data?.wind?.unit} {data?.wind?.direction} */}
+                {data?.wind?.value} {data?.wind?.unit} {data?.wind?.direction}
               </p>
             </Box>
           </Box>
@@ -134,7 +142,7 @@ export const Result = () => {
             >
               <p style={{ fontSize: "25px", fontWeight: "300" }}>Clouds</p>
               <p style={{ fontSize: "35px", fontWeight: "700" }}>
-                {/* {data?.cloud?.value} {data?.cloud?.unit} */}
+                {data?.cloud?.value} {data?.cloud?.unit}
               </p>
             </Box>
           </Box>

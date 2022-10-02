@@ -17,9 +17,15 @@ type Props = {
   children?: React.ReactNode;
 };
 
+type City = "Aarhus" | "Horsens" | "Copenhagen";
+
+type RequestType = "xhr" | "fetch";
+
 type ContextType = {
-  changeCity: (city: "Aarhus" | "Horsens" | "Copenhagen") => void;
-  changeRequestType: (type: "xhr" | "fetch") => void;
+  city: City;
+  changeCity: (city: City) => void;
+  requestType: RequestType;
+  changeRequestType: (type: RequestType) => void;
   latestMeasurements: () => FormattedHistoricalData;
   minTempForLastDay: () => number;
   maxTempForLastDay: () => number;
@@ -34,8 +40,8 @@ export const useAppContext = (): ContextType =>
   useContext(AppContext) as ContextType;
 
 export const Context: React.FC<Props> = ({ children }: Props) => {
-  const [city, setCity] = useState("Aarhus");
-  const [requestType, setRequestType] = useState<"fetch" | "xhr">("fetch");
+  const [city, setCity] = useState<City>("Aarhus");
+  const [requestType, setRequestType] = useState<RequestType>("fetch");
   const [historicalData, setHistoricalData] = useState<
     FormattedHistoricalData[]
   >([]);
@@ -46,6 +52,14 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
     forecastData: fetchForecastData,
     historicalData: fetchHistoricalData,
   } = useFetch(city);
+
+  //initial data load
+  useEffect(() => {
+    if (forecastData.length === 0) {
+      setForecastData(fetchForecastData);
+      setHistoricalData(fetchHistoricalData);
+    }
+  }, [forecastData, fetchForecastData]);
 
   useEffect(() => {
     if (requestType === "fetch") {
@@ -95,9 +109,10 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
   return (
     <AppContext.Provider
       value={{
-        changeCity: (city: "Aarhus" | "Horsens" | "Copenhagen") =>
-          setCity(city),
-        changeRequestType: (type: "xhr" | "fetch") => setRequestType(type),
+        city,
+        changeCity: (city: City) => setCity(city),
+        changeRequestType: (type: RequestType) => setRequestType(type),
+        requestType,
         latestMeasurements,
         minTempForLastDay,
         maxTempForLastDay,

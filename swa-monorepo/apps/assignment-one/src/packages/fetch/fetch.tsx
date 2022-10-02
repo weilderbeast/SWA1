@@ -17,42 +17,42 @@ export const useFetch = (city: string) => {
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
 
+  const fetchForecastData = async (city: string) => {
+    return await fetch(url + forecastUrl + "/" + city, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then(async (value) => {
+        const weatherData: ForecastComposite[] = await value.json();
+        return weatherData;
+      })
+      .then((value) => {
+        setForecastData(formatForecastData(value));
+      });
+  };
+
+  const fetchHistoricalData = async (city: string) => {
+    return await fetch(url + dataUrl + "/" + city, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then(async (value) => {
+        const weatherData: HistoricalComposite[] = await value.json();
+        return weatherData;
+      })
+      .then((value) => {
+        setHistoricalData(formatHistoricalData(value));
+      });
+  };
+
   useEffect(() => {
-    const fetchForecastData = async (city: string) => {
-      return await fetch(url + forecastUrl + "/" + city, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then(async (value) => {
-          const weatherData: ForecastComposite[] = await value.json();
-          return weatherData;
-        })
-        .then((value) => {
-          setForecastData(formatForecastData(value));
-        });
-    };
-
-    const fetchHistoricalData = async (city: string) => {
-      return await fetch(url + dataUrl + "/" + city, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then(async (value) => {
-          const weatherData: HistoricalComposite[] = await value.json();
-          return weatherData;
-        })
-        .then((value) => {
-          setHistoricalData(formatHistoricalData(value));
-        });
-    };
-
     fetchForecastData(city);
     fetchHistoricalData(city);
-  }, []);
+  }, [city]);
 
   return {
     historicalData,

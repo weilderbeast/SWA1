@@ -17,8 +17,7 @@ export const useXHR = (city: string) => {
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
 
-  //i hate this
-  useEffect(() => {
+  const sendHistoricalDataRequest = () => {
     const historicalDataRequest = new XMLHttpRequest();
     historicalDataRequest.open("GET", url + dataUrl + "/" + city);
     historicalDataRequest.onload = () => {
@@ -28,7 +27,9 @@ export const useXHR = (city: string) => {
       setHistoricalData(formatHistoricalData(data));
     };
     historicalDataRequest.send();
+  };
 
+  const sendForecastDataRequest = () => {
     const forecastDataRequest = new XMLHttpRequest();
     forecastDataRequest.open("GET", url + forecastUrl + "/" + city);
     forecastDataRequest.onload = () => {
@@ -38,7 +39,12 @@ export const useXHR = (city: string) => {
       setForecastData(formatForecastData(data));
     };
     forecastDataRequest.send();
-  }, []);
+  };
+
+  useEffect(() => {
+    sendHistoricalDataRequest();
+    sendForecastDataRequest();
+  }, [city]);
 
   return {
     historicalData,
