@@ -1,8 +1,10 @@
 import { Box } from "ui";
-import "./app.css";
+import "./get.css";
 import { Result } from "./components/result";
+import { useAppContext } from "../../packages/context/context";
 
-export const App = () => {
+export const Get = () => {
+  const { city } = useAppContext();
   return (
     <Box
       height="100vh"
@@ -11,10 +13,11 @@ export const App = () => {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
-      backgroundImage={`url("./Aarhus.jpg")`}
+      backgroundImage={`url("./${city}.jpg")`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
+      transition="background .2s ease-in-out"
     >
       <Box
         display="flex"
@@ -28,16 +31,6 @@ export const App = () => {
         gap="15%"
       >
         <Result />
-        {/* <Timeline
-          data={[
-            {
-              temperature: mockTemp,
-              cloud: mockCloud,
-              precipitation: mockPrecip,
-              wind: mockWind,
-            },
-          ]}
-        /> */}
       </Box>
     </Box>
   );

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { IconContext } from "react-icons";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Context } from "./packages/context/context";
-import { App } from "./pages/app/app";
+import { Get } from "./pages/get/get";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <Context>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<Get />} />
             <Route path="/post" />
           </Routes>
         </BrowserRouter>
