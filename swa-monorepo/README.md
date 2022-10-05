@@ -1,73 +1,24 @@
-# Turborepo starter
+# SWA Assignment 1
 
-This is an official Yarn v1 starter turborepo.
+# Structure
 
-## What's inside?
+- This is a monorepo set-up, built with [turborepo](https://turborepo.org)
+- The apps package contains the API provided, and the assignment itself
+- The app is built with react and typescript using [create-vite](https://vitejs.dev/)
+- The packages directory has the linting and ui packages to be shared by multiple apps (i was planning to make all the assignments into one repository for ease of use for myself, but will re-consider for the teacher)
+- The ui package has some reusable components with a syntax i like to steal from [chakra-ui](https://chakra-ui.com)
+- The assignment itself has custom built types, formatters, ui, and on-the-fly switching for which kind of request it should use (fetch/xhr)
+- Tip: if you try to use the post page, get a chrome plugin to allow cors on localhost (i bet you already knew that), but it's only a problem on chrome (as far as i'm aware)
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
+# Pages
 
-### Apps and Packages
+- There's 2 pages, `/` and `/post`
+- I was too lazy to make a button to switch to them so you can manually write the URL
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+# Usage
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+- Navigate to `/apps/weather_report` and run `yarn start` to run the server (you should really do that first as the requests come in at page render time)
+- Navigate to `/apps/assignment-one` and run `yarn install` to install appropriate packages, then run `yarn dev` to run the web app
+- Click the city name to change which city is being displayed and fetched for
+- Click the button next to the city name to change the request type used
+- Navigate to `/post` to post data to the server (i could not figure out the structure for it but i did get it a couple of times so good luck)
