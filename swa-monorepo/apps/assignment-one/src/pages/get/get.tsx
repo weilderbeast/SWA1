@@ -2,6 +2,7 @@ import { Box } from "ui";
 import "./get.css";
 import { Result } from "./components/result";
 import { useAppContext } from "../../packages/context/context";
+import { Timeline } from "./components/timeline";
 
 export const Get = () => {
   const { city } = useAppContext();
@@ -31,6 +32,7 @@ export const Get = () => {
         gap="15%"
       >
         <Result />
+        <Timeline />
       </Box>
     </Box>
   );

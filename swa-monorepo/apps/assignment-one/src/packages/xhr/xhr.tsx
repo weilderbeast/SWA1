@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ForecastComposite,
   FormattedForecastData,
@@ -17,7 +17,7 @@ export const useXHR = (city: string) => {
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
 
-  const sendHistoricalDataRequest = () => {
+  const sendHistoricalDataRequest = useCallback(() => {
     const historicalDataRequest = new XMLHttpRequest();
     historicalDataRequest.open("GET", url + dataUrl + "/" + city);
     historicalDataRequest.onload = () => {
@@ -27,9 +27,9 @@ export const useXHR = (city: string) => {
       setHistoricalData(formatHistoricalData(data));
     };
     historicalDataRequest.send();
-  };
+  }, [city]);
 
-  const sendForecastDataRequest = () => {
+  const sendForecastDataRequest = useCallback(() => {
     const forecastDataRequest = new XMLHttpRequest();
     forecastDataRequest.open("GET", url + forecastUrl + "/" + city);
     forecastDataRequest.onload = () => {
@@ -39,12 +39,12 @@ export const useXHR = (city: string) => {
       setForecastData(formatForecastData(data));
     };
     forecastDataRequest.send();
-  };
+  }, [city]);
 
   useEffect(() => {
     sendHistoricalDataRequest();
     sendForecastDataRequest();
-  }, [city]);
+  }, [city, sendForecastDataRequest, sendHistoricalDataRequest]);
 
   return {
     historicalData,

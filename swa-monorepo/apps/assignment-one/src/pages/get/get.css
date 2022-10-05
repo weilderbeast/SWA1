@@ -29,3 +29,26 @@ input:focus {
 ::placeholder {
   color: var(--white-100);
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.city {
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.selected:hover {
+  background-color: rgba(1, 1, 1, 0.7) !important;
+}
+
+.city:hover {
+  background-color: rgba(100, 100, 100, 0.5);
+}

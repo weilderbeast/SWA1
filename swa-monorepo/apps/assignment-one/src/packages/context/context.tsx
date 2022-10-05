@@ -59,7 +59,7 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
       setForecastData(fetchForecastData);
       setHistoricalData(fetchHistoricalData);
     }
-  }, [forecastData, fetchForecastData]);
+  }, [forecastData, fetchForecastData, fetchHistoricalData]);
 
   useEffect(() => {
     if (requestType === "fetch") {
@@ -69,7 +69,13 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
       setForecastData(xhrForecastData);
       setHistoricalData(xhrHistoricalData);
     }
-  }, [requestType]);
+  }, [
+    fetchForecastData,
+    fetchHistoricalData,
+    requestType,
+    xhrForecastData,
+    xhrHistoricalData,
+  ]);
 
   const latestMeasurements = useCallback(
     () => historicalData[historicalData.length - 1],
@@ -92,10 +98,13 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
 
   const totalPrecipForLastDay = useCallback(
     () =>
-      historicalData
-        .map((item) => item.data.precipitation.value)
-        .slice(-24)
-        .reduce((item, prev) => item + prev),
+      parseFloat(
+        historicalData
+          .map((item) => item.data.precipitation.value)
+          .slice(-24)
+          .reduce((item, prev) => item + prev)
+          .toFixed(2)
+      ),
     [historicalData]
   );
 
@@ -103,7 +112,9 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
     const last24 = historicalData
       .map((item) => item.data.wind.value)
       .slice(-24);
-    return last24.reduce((item, prev) => item + prev) / 24;
+    return parseFloat(
+      (last24.reduce((item, prev) => item + prev) / 24).toFixed(2)
+    );
   }, [historicalData]);
 
   return (

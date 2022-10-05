@@ -4,6 +4,7 @@ import { IconContext } from "react-icons";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Context } from "./packages/context/context";
 import { Get } from "./pages/get/get";
+import { Post } from "./pages/post/post";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -14,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Get />} />
-            <Route path="/post" />
+            <Route path="/post" element={<Post />} />
           </Routes>
         </BrowserRouter>
       </Context>
