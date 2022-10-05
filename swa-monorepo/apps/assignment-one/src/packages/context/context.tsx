@@ -32,6 +32,8 @@ type ContextType = {
   totalPrecipForLastDay: () => number;
   avgWindSpeedForLastDay: () => number;
   forecastData: FormattedForecastData[];
+  response: string;
+  postData: (data: any) => void;
 };
 
 const AppContext = createContext<ContextType>({} as ContextType);
@@ -46,11 +48,18 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
     FormattedHistoricalData[]
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
-  const { forecastData: xhrForecastData, historicalData: xhrHistoricalData } =
-    useXHR(city);
+  const [response, setResponse] = useState("");
+  const {
+    forecastData: xhrForecastData,
+    historicalData: xhrHistoricalData,
+    response: xhrResponse,
+    postData: postXhrData,
+  } = useXHR(city);
   const {
     forecastData: fetchForecastData,
     historicalData: fetchHistoricalData,
+    response: fetchResponse,
+    postData: postFetchData,
   } = useFetch(city);
 
   //initial data load
@@ -65,16 +74,20 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
     if (requestType === "fetch") {
       setForecastData(fetchForecastData);
       setHistoricalData(fetchHistoricalData);
+      setResponse(fetchResponse);
     } else {
       setForecastData(xhrForecastData);
       setHistoricalData(xhrHistoricalData);
+      setResponse(xhrResponse);
     }
   }, [
     fetchForecastData,
     fetchHistoricalData,
+    fetchResponse,
     requestType,
     xhrForecastData,
     xhrHistoricalData,
+    xhrResponse,
   ]);
 
   const latestMeasurements = useCallback(
@@ -117,6 +130,17 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
     );
   }, [historicalData]);
 
+  const postData = useCallback(
+    (data: any) => {
+      if (requestType === "fetch") {
+        postFetchData(data);
+      } else {
+        postXhrData(data);
+      }
+    },
+    [postFetchData, postXhrData, requestType]
+  );
+
   return (
     <AppContext.Provider
       value={{
@@ -130,6 +154,8 @@ export const Context: React.FC<Props> = ({ children }: Props) => {
         totalPrecipForLastDay,
         avgWindSpeedForLastDay,
         forecastData,
+        response,
+        postData,
       }}
     >
       {children}

@@ -16,6 +16,17 @@ export const useXHR = (city: string) => {
     FormattedHistoricalData[]
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
+  const [response, setResponse] = useState("");
+
+  const postData = useCallback((data: any) => {
+    const postRequest = new XMLHttpRequest();
+    postRequest.open("POST", url + dataUrl);
+    postRequest.setRequestHeader("Content-Type", "application/json");
+    postRequest.onreadystatechange = () => {
+      setResponse(postRequest.responseText);
+    };
+    postRequest.send(data);
+  }, []);
 
   const sendHistoricalDataRequest = useCallback(() => {
     const historicalDataRequest = new XMLHttpRequest();
@@ -49,5 +60,7 @@ export const useXHR = (city: string) => {
   return {
     historicalData,
     forecastData,
+    postData,
+    response,
   };
 };

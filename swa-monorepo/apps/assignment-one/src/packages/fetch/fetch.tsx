@@ -16,6 +16,21 @@ export const useFetch = (city: string) => {
     FormattedHistoricalData[]
   >([]);
   const [forecastData, setForecastData] = useState<FormattedForecastData[]>([]);
+  const [response, setResponse] = useState("");
+
+  const postData = async (data: any) => {
+    return await fetch(url + dataUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        cors: "no-cors",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      setResponse(res.statusText);
+    });
+  };
 
   const fetchForecastData = async (city: string) => {
     return await fetch(url + forecastUrl + "/" + city, {
@@ -57,5 +72,7 @@ export const useFetch = (city: string) => {
   return {
     historicalData,
     forecastData,
+    postData,
+    response,
   };
 };
