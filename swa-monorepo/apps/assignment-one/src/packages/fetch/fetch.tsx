@@ -24,7 +24,6 @@ export const useFetch = (city: string) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        cors: "no-cors",
       },
       body: JSON.stringify(data),
     }).then((res) => {

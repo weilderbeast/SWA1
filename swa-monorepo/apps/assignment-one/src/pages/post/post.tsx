@@ -9,6 +9,7 @@ export const Post = () => {
   const exampleString =
     'Data needs to be of type of: \n{"value": -,\n"type": "-",\n"unit": "-",\n"time": "-",\n"place": "-"}';
   const [sendText, setSendText] = useState("");
+
   return (
     <Box
       background="url(/Post.jpg)"
@@ -36,9 +37,7 @@ export const Post = () => {
           width: "800px",
           color: "white",
         }}
-        onChange={(e) =>
-          setSendText(JSON.stringify(JSON.parse(e.target.value)))
-        }
+        onChange={(e) => setSendText(JSON.stringify(e.target.value))}
       ></textarea>
       <button
         style={{
